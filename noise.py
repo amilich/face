@@ -1,7 +1,12 @@
+import glob
+import sys
+import os
+import scipy.misc
 import numpy as np 
 from matplotlib.image import imread
 import matplotlib.pyplot as plt
 
+# Web source: http://www.xiaoliangbai.com/2016/09/09/more-on-image-noise-generation
 # Source of the code is based on an excelent piece code from stackoverflow
 # http://stackoverflow.com/questions/22937589/how-to-add-noise-gaussian-salt-and-pepper-etc-to-image-in-python-with-opencv
 def noise_generator (noise_type,img):
@@ -29,7 +34,7 @@ def noise_generator (noise_type,img):
         gauss = gauss.reshape(row,col,ch)
         noisy = image + gauss
         return noisy.astype('uint8')
-    elif noise_type == "s&p":
+    elif noise_type == "sp":
         s_vs_p = 0.5
         amount = 0.05 #0.004
         out = image
@@ -49,7 +54,7 @@ def noise_generator (noise_type,img):
         vals = 2 ** np.ceil(np.log2(vals))
         noisy = np.random.poisson(image * vals) / float(vals)
         return noisy
-    elif noise_type =="speckle":
+    elif noise_type == "speckle":
         gauss = np.random.randn(row,col,ch)
         gauss = gauss.reshape(row,col,ch)        
         noisy = image + image * gauss
@@ -57,11 +62,11 @@ def noise_generator (noise_type,img):
     else:
         return image
 
-def main():
+def test():
     im = np.asarray(imread('dog.jpg'))
 
     plt.figure(2)
-    sp_im = noise_generator('s&p', im)
+    sp_im = noise_generator('sp', im)
     gauss_im = noise_generator('gauss', im)
     plt.subplot(1,2,1)
     plt.title('Salt & Pepper Noise')
@@ -73,7 +78,26 @@ def main():
     plt.title('Gaussian Noise')
     plt.show()
     plt.close(2)
-    return
+
+def createNoise(fileName, newDirName, noiseType):
+    im = np.asarray(imread(fileName))
+    new_im = noise_generator(noiseType, im)
+    scipy.misc.imsave(newDirName + os.path.basename(fileName), new_im)
+
+def main(argv):
+    dirName = str(argv[0])
+    noiseType = str(argv[1])
+    filesInDir = glob.glob('./' + dirName + '/*')
+    print(filesInDir)
+
+    newDirName = dirName[:-1] + '_NOISE/'
+    if os.path.exists(newDirName):
+        print('Directory named ' + newDirName + ' already exists, aborting.')
+        return -1
+    os.makedirs(newDirName)
+    for fileName in filesInDir:
+        createNoise(fileName, newDirName, noiseType)
+
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
