@@ -1,14 +1,4 @@
 import sys
-path_elems = ['/home/milichab/face', '/usr/lib/python35.zip',
-              '/usr/lib/python3.5', '/usr/lib/python3.5/plat-x86_64-linux-gnu',
-              '/usr/lib/python3.5/lib-dynload',
-              '/home/milichab/.local/lib/python3.5/site-packages',
-              '/usr/local/lib/python3.5/dist-packages',
-              '/usr/lib/python3/dist-packages']
-
-for item in path_elems:
-    sys.path.append(path_elems)
-
 import glob
 import os
 import scipy.misc
@@ -96,7 +86,6 @@ def createNoise(fileName, newDirName, noiseType):
     scipy.misc.imsave(newDirName + os.path.basename(fileName), new_im)
 
 def main(argv):
-
     dirName = str(argv[0])
     noiseType = str(argv[1])
     filesInDir = glob.glob('./' + dirName + '/*')
@@ -109,7 +98,8 @@ def main(argv):
     # os.makedirs(newDirName, 777)
     try:
         original_umask = os.umask(0)
-        os.makedirs(newDirName, 777)
+        os.makedirs(newDirName)
+        os.chmod(newDirName, 0777)
     finally:
         os.umask(original_umask)
 
