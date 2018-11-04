@@ -94,7 +94,13 @@ def main(argv):
     if os.path.exists(newDirName):
         print('Directory named ' + newDirName + ' already exists, aborting.')
         return -1
-    os.makedirs(newDirName, 777)
+    # os.makedirs(newDirName, 777)
+    try:
+        original_umask = os.umask(0)
+        os.makedirs(newDirName, desired_permission)
+    finally:
+        os.umask(original_umask)
+
     for fileName in filesInDir:
         createNoise(fileName, newDirName, noiseType)
 
