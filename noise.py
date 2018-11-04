@@ -1,15 +1,15 @@
+import sys
 path_elems = ['/home/milichab/face', '/usr/lib/python35.zip',
               '/usr/lib/python3.5', '/usr/lib/python3.5/plat-x86_64-linux-gnu',
               '/usr/lib/python3.5/lib-dynload',
               '/home/milichab/.local/lib/python3.5/site-packages',
               '/usr/local/lib/python3.5/dist-packages',
               '/usr/lib/python3/dist-packages']
-              
+
 for item in path_elems:
     sys.path.append(path_elems)
 
 import glob
-import sys
 import os
 import scipy.misc
 import numpy as np 
