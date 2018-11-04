@@ -94,7 +94,7 @@ def main(argv):
     if os.path.exists(newDirName):
         print('Directory named ' + newDirName + ' already exists, aborting.')
         return -1
-    os.makedirs(newDirName)
+    os.makedirs(newDirName, 777)
     for fileName in filesInDir:
         createNoise(fileName, newDirName, noiseType)
 
