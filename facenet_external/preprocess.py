@@ -7,7 +7,7 @@ import time
 
 import cv2
 
-from medium_facenet_tutorial.align_dlib import AlignDlib
+from facenet_external.align_dlib import AlignDlib
 
 logger = logging.getLogger(__name__)
 

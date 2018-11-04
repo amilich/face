@@ -58,8 +58,6 @@ RUN cd dlib-19.4 \
     && cd $WORKDIR \
     && rm /dlib-19.4.tar.bz2
 
-ADD medium_facenet_tutorial/ medium_facenet_tutorial/
-
 ADD $PWD/requirements.txt /requirements.txt
 RUN pip3 install -r /requirements.txt
 

@@ -1,0 +1,20 @@
+# Preprocess
+
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face python3 /face/facenet_external/preprocess.py \
+--input-dir /face/data \
+--output-dir /face/output/intermediate \
+--crop-dim 180
+
+# Test
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/intermediate \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 10

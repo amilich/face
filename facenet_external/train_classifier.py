@@ -11,7 +11,7 @@ from sklearn.svm import SVC
 from tensorflow.python.platform import gfile
 
 from lfw_input import filter_dataset, split_dataset, get_dataset
-from medium_facenet_tutorial import lfw_input
+from facenet_external import lfw_input
 
 logger = logging.getLogger(__name__)
 
