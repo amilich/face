@@ -86,6 +86,7 @@ def createNoise(fileName, newDirName, noiseType):
     scipy.misc.imsave(newDirName + os.path.basename(fileName), new_im)
 
 def main(argv):
+    print(sys.path)
     dirName = str(argv[0])
     noiseType = str(argv[1])
     filesInDir = glob.glob('./' + dirName + '/*')
