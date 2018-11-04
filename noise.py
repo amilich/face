@@ -90,7 +90,7 @@ def main(argv):
     filesInDir = glob.glob('./' + dirName + '/*')
     print(filesInDir)
 
-    newDirName = dirName[:-1] + '_NOISE/'
+    newDirName = 'NOISE_' + dirName[:-1] + '/'
     if os.path.exists(newDirName):
         print('Directory named ' + newDirName + ' already exists, aborting.')
         return -1
