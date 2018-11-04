@@ -99,7 +99,7 @@ def main(argv):
     try:
         original_umask = os.umask(0)
         os.makedirs(newDirName)
-        os.chmod(newDirName, 0777)
+        os.chmod(newDirName, 0o777)
     finally:
         os.umask(original_umask)
 
