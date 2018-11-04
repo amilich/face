@@ -107,9 +107,12 @@ def filter_dataset(dataset, min_images_per_label=10):
     filtered_dataset = []
     for i in range(len(dataset)):
         if len(dataset[i].image_paths) < min_images_per_label:
-            logger.info('Skipping class: {}'.format(dataset[i].name))
+            logger.info('Skipping class: {}; {}/{}'.format(dataset[i].name, \
+                len(dataset[i].image_paths), \
+                min_images_per_label))
             continue
         else:
+            logger.info('Using class: {}'.format(dataset[i].name))
             filtered_dataset.append(dataset[i])
     return filtered_dataset
 
