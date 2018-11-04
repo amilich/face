@@ -82,6 +82,7 @@ def test():
 def createNoise(fileName, newDirName, noiseType):
     im = np.asarray(imread(fileName))
     new_im = noise_generator(noiseType, im)
+    print(newDirName + os.path.basename(fileName))
     scipy.misc.imsave(newDirName + os.path.basename(fileName), new_im)
 
 def main(argv):
