@@ -97,7 +97,7 @@ def main(argv):
     # os.makedirs(newDirName, 777)
     try:
         original_umask = os.umask(0)
-        os.makedirs(newDirName, desired_permission)
+        os.makedirs(newDirName, 777)
     finally:
         os.umask(original_umask)
 
