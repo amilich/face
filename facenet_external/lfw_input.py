@@ -112,7 +112,9 @@ def filter_dataset(dataset, min_images_per_label=10):
                 min_images_per_label))
             continue
         else:
-            logger.info('Using class: {}'.format(dataset[i].name))
+            logger.info('Using class: {}; {}/{}'.format(dataset[i].name, \
+                len(dataset[i].image_paths), \
+                min_images_per_label))
             filtered_dataset.append(dataset[i])
     return filtered_dataset
 
