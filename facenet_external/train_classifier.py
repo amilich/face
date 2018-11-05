@@ -143,7 +143,7 @@ def _create_embeddings(embedding_layer, images, labels, images_placeholder, phas
             label_array = np.concatenate([label_array, batch_labels]) if label_array is not None else batch_labels
             i += 1
 
-    except tf.errors.OutOfRangeError:
+    except: # tf.errors.OutOfRangeError:
         pass
 
     return emb_array, label_array
