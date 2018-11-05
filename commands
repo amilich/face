@@ -7,6 +7,13 @@ docker run -v $PWD:/face \
 --output-dir /face/output/intermediate \
 --crop-dim 180
 
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face python3 /face/facenet_external/preprocess.py \
+--input-dir /face/data-casia \
+--output-dir /face/output/intermediate \
+--crop-dim 180
+
 
 # Train
 
@@ -22,6 +29,18 @@ python3 /face/facenet_external/train_classifier.py \
 --min-num-images-per-class 4 \
 --is-train 
 
+
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/intermediate \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 1 \
+--min-num-images-per-class 10 \
+--is-train 
 
 # Test
 
