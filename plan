@@ -1,0 +1,30 @@
+
+Later goals: Better attack - FGSM. Better defense.
+
+Friday   November 16: 3 page report due
+	Goal: Have attack that decreases classifier accuracy.
+		- Random noise (seems doable right now)
+
+Wednesday
+	Both look over report
+
+Tuesday  November 13
+	Finishing report - Michael
+
+Sunday   November 11
+	Continue writing report - Michael
+Saturday November 10 (early morning; afternoon)
+	Start writing report - Andrew
+
+Friday   November 9: Try adding some noisy images to training; 
+	see if model is better
+
+Tuesday  November 6: Check in about testing on noisy images; 
+	maybe 1 person's noisy images. Model will be trained.
+
+Monday   November 5: Have new Docker image, model training, and model
+	testing on Google Cloud.
+
+
+Lit review notes
+	https://arxiv.org/abs/1803.00401 
