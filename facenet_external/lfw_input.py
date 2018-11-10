@@ -78,10 +78,13 @@ def read_image_from_disk(filename_to_label_tuple):
 
 
 def get_image_paths_and_labels(dataset):
+    import hashlib
     image_paths_flat = []
     labels_flat = []
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
+        digest = hashlib.sha1(image_paths_flat).hexdigest()
+        digest_int = int(digest,16)
         labels_flat += [i] * len(dataset[i].image_paths)
     return image_paths_flat, labels_flat
 
