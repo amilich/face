@@ -88,23 +88,35 @@ def createNoise(fileName, newDirName, noiseType):
 def main(argv):
     dirName = str(argv[0])
     noiseType = str(argv[1])
-    filesInDir = glob.glob('./' + dirName + '/*')
-    print(filesInDir)
+    print(dirName, noiseType)
+    # filesInDir = glob.glob('./' + dirName + '/*')
+    # print(filesInDir)
 
     newDirName = 'NOISE_' + dirName[:-1] + '/'
     if os.path.exists(newDirName):
         print('Directory named ' + newDirName + ' already exists, aborting.')
-        return -1
+        # return -1
     # os.makedirs(newDirName, 777)
-    try:
-        original_umask = os.umask(0)
-        os.makedirs(newDirName)
-        os.chmod(newDirName, 0o777)
-    finally:
-        os.umask(original_umask)
+    else:
+        try:
+            original_umask = os.umask(0)
+            os.makedirs(newDirName)
+            os.chmod(newDirName, 0o777)
+        finally:
+            os.umask(original_umask)
 
-    for fileName in filesInDir:
-        createNoise(fileName, newDirName, noiseType)
+    for folderName in os.listdir(dirName):
+        if folderName.startswith('.'):
+            continue
+        print(folderName)
+        newSubDir = newDirName + '/' + 'NOISE_' + folderName + '/'
+        print('new dir {}'.format(newSubDir))
+        if not os.path.exists(newSubDir):
+            os.makedirs(newSubDir)
+            os.chmod(newSubDir, 0o777)
+        for filename in os.listdir(dirName + '/' + folderName):
+            print(filename)
+            createNoise(dirName + '/' + folderName + '/' + filename, newSubDir, noiseType)
 
 
 if __name__ == "__main__":
