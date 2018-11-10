@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # Web source: http://www.xiaoliangbai.com/2016/09/09/more-on-image-noise-generation
 # Source of the code is based on an excelent piece code from stackoverflow
 # http://stackoverflow.com/questions/22937589/how-to-add-noise-gaussian-salt-and-pepper-etc-to-image-in-python-with-opencv
-def noise_generator (noise_type,img):
+def noise_generator(noise_type, img):
     """
     Generate noise to a given Image based on required noise type
     
@@ -36,7 +36,8 @@ def noise_generator (noise_type,img):
         return noisy.astype('uint8')
     elif noise_type == "sp":
         s_vs_p = 0.5
-        amount = 0.05 #0.004
+        # amount = 0.05 #0.004
+        amount = 0.01
         out = image
         # Generate Salt '1' noise
         num_salt = np.ceil(amount * image.size * s_vs_p)
