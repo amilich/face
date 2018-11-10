@@ -1,5 +1,7 @@
 import logging
 import os
+import re
+import hashlib
 
 import numpy as np
 import tensorflow as tf
@@ -78,12 +80,13 @@ def read_image_from_disk(filename_to_label_tuple):
 
 
 def get_image_paths_and_labels(dataset):
-    import hashlib
     image_paths_flat = []
     labels_flat = []
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
-        print(image_paths_flat)
+        label_name = re.split(r'(\d+)', image_paths_flat[0])[0]
+        if label_name[-1] == '_':
+            label_name = label_name[:-1]
         digest = hashlib.sha1(image_paths_flat.strip().encode()).hexdigest()
         digest_int = int(digest,16)
         labels_flat += [i] * len(dataset[i].image_paths)
