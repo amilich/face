@@ -172,7 +172,9 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
         best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
 
         for i in range(len(best_class_indices)):
-            print('%4d  %s: %.3f' % (i, class_names[best_class_indices[i]], best_class_probabilities[i]))
+            # print('%4d  %s: %.3f' % (i, class_names[best_class_indices[i]], best_class_probabilities[i]))
+            print('{} {}: {} ; {}'.format(i, class_names[best_class_indices[i]], best_class_probabilities[i]\
+                  label_array[i]))
 
         accuracy = np.mean(np.equal(best_class_indices, label_array))
         print('Accuracy: %.3f' % accuracy)

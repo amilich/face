@@ -66,6 +66,17 @@ python3 /face/facenet_external/train_classifier.py \
 --num-epochs 5 \
 --min-num-images-per-class 20
 
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/noisy_raw \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 20
+
 output
 	intermediate
 		personA
@@ -88,4 +99,4 @@ output
 
 # Generating noise
 
-python3 ../noise.py noisy/ sp
+python3 ../noise.py noisy_raw/ sp
