@@ -87,7 +87,8 @@ def get_image_paths_and_labels(dataset):
         label_name = re.split(r'(\d+)', image_paths_flat[0])[0]
         if label_name[-1] == '_':
             label_name = label_name[:-1]
-        digest = hashlib.sha1(image_paths_flat.strip().encode()).hexdigest()
+        print(label_name)
+        digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
         digest_int = int(digest,16)
         labels_flat += [i] * len(dataset[i].image_paths)
     return image_paths_flat, labels_flat
