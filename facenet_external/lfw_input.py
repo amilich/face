@@ -83,6 +83,7 @@ def get_image_paths_and_labels(dataset):
     labels_flat = []
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
+        print(image_paths_flat)
         digest = hashlib.sha1(image_paths_flat.strip().encode()).hexdigest()
         digest_int = int(digest,16)
         labels_flat += [i] * len(dataset[i].image_paths)
