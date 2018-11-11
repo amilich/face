@@ -4,6 +4,7 @@ import os
 import pickle
 import sys
 import time
+import hashlib
 
 import numpy as np
 import tensorflow as tf
