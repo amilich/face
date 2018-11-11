@@ -84,7 +84,7 @@ def get_image_paths_and_labels(dataset):
     labels_flat = []
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
-        label_name = re.split(r'(\d+)', image_paths_flat[0])[0]
+        label_name = re.split(r'(\d+)', dataset[i].image_paths[0])[0]
         if label_name[-1] == '_':
             label_name = label_name[:-1]
         label_name = label_name.split('/')[-1]
