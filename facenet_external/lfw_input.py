@@ -103,8 +103,9 @@ def get_image_paths_and_labels(dataset):
         labels_flat += [i] * len(dataset[i].image_paths)
         name_to_idx[label_name] = i
         name_to_idx[i] = label_name
-    with open('label_indices.dic', 'wb') as dict_file:
-        pickle.dump(name_to_idx, dict_file, protocol=pickle.HIGHEST_PROTOCOL)
+    if is_train:
+        with open('label_indices.dic', 'wb') as dict_file:
+            pickle.dump(name_to_idx, dict_file, protocol=pickle.HIGHEST_PROTOCOL)
     return image_paths_flat, labels_flat
 
 

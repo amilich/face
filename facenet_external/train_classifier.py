@@ -42,10 +42,10 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
             images, labels, class_names = _load_images_and_labels(train_set, image_size=160, batch_size=batch_size,
                                                                   num_threads=num_threads, num_epochs=num_epochs,
                                                                   random_flip=True, random_brightness=True,
-                                                                  random_contrast=True)
+                                                                  random_contrast=True, is_train=is_train)
         else:
             images, labels, class_names = _load_images_and_labels(test_set, image_size=160, batch_size=batch_size,
-                                                                  num_threads=num_threads, num_epochs=1)
+                                                                  num_threads=num_threads, num_epochs=1, is_train=is_train)
 
         _load_model(model_filepath=model_path)
 
@@ -92,9 +92,9 @@ def _get_test_and_train_set(input_dir, min_num_images_per_label, split_ratio=0.7
 
 
 def _load_images_and_labels(dataset, image_size, batch_size, num_threads, num_epochs, random_flip=False,
-                            random_brightness=False, random_contrast=False):
+                            random_brightness=False, random_contrast=False, is_train=False):
     class_names = [cls.name for cls in dataset]
-    image_paths, labels = lfw_input.get_image_paths_and_labels(dataset)
+    image_paths, labels = lfw_input.get_image_paths_and_labels(dataset, is_train)
     images, labels = lfw_input.read_data(image_paths, labels, image_size, batch_size, num_epochs, num_threads,
                                          shuffle=False, random_flip=random_flip, random_brightness=random_brightness,
                                          random_contrast=random_contrast)
