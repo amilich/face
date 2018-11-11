@@ -164,7 +164,7 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
     if not os.path.exists(classifier_filename):
         raise ValueError('Pickled classifier not found, have you trained first?')
 
-    with open(classifier_filename, 'rb') as f:
+    with open(classifier_filename, 'r') as f:
         model, class_names = pickle.load(f)
 
         f_path = '~/face/output/label_indices.dic'
