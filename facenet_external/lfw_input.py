@@ -90,7 +90,7 @@ def get_image_paths_and_labels(dataset):
         label_name = label_name.split('/')[-1]
         digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
         digest_int = int(digest,16)
-        print('idx: {} path: {} label name: {}, label idx = {}'.format(i, dataset[i].image_paths, label_name, digest_int))
+        print('idx: {} label name: {}, label idx = {}'.format(i, label_name, digest_int))
         labels_flat += [i] * len(dataset[i].image_paths)
     return image_paths_flat, labels_flat
 
