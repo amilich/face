@@ -82,9 +82,6 @@ def read_image_from_disk(filename_to_label_tuple):
 
 def get_hash_idx(cls_name):
     label_name = cls_name
-    if label_name[-1] == '_':
-        label_name = label_name[:-1]
-    label_name = label_name.split('/')[-1]
     digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
     digest_int = int(digest,16)
     digest_int = digest_int % 100000 # TODO choose mod index
@@ -98,6 +95,9 @@ def get_image_paths_and_labels(dataset, is_train):
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
         label_name = re.split(r'(\d+)', dataset[i].image_paths[0])[0]
+        if label_name[-1] == '_':
+            label_name = label_name[:-1]
+        label_name = label_name.split('/')[-1]
         digest_int = get_hash_idx(label_name)
         print('idx: {} label name: {}, label idx = {}'.format(i, label_name, digest_int))
         # labels_flat += [digest_int] * len(dataset[i].image_paths)
@@ -106,7 +106,9 @@ def get_image_paths_and_labels(dataset, is_train):
         name_to_idx[i] = label_name
     if is_train:
         print('saving {}'.format(name_to_idx))
-        with open('label_indices.dic', 'wb') as dict_file:
+        f_path = os.getcwd() + '/output/label_indices.dic'
+        print('path {}'.format(f_path))
+        with open(f_path, 'wb') as dict_file:
             pickle.dump(name_to_idx, dict_file, protocol=pickle.HIGHEST_PROTOCOL)
     return image_paths_flat, labels_flat
 
