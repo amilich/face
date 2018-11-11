@@ -108,7 +108,7 @@ def get_image_paths_and_labels(dataset, is_train):
         curpath = os.path.abspath(os.curdir)
         print('saving {}'.format(name_to_idx))
         print(curpath)
-        f_path = '~/face/output/label_indices.dic'
+        f_path = '/home/milichab/face/output/label_indices.dic'
         print('path {}'.format(f_path))
         with open(f_path, 'w') as dict_file:
             pickle.dump(name_to_idx, dict_file, protocol=pickle.HIGHEST_PROTOCOL)
