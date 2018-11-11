@@ -1,0 +1,102 @@
+# Preprocess
+
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face python3 /face/facenet_external/preprocess.py \
+--input-dir /face/data \
+--output-dir /face/output/intermediate \
+--crop-dim 180
+
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face python3 /face/facenet_external/preprocess.py \
+--input-dir /face/data-casia \
+--output-dir /face/output/intermediate \
+--crop-dim 180
+
+
+# Train
+
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/intermediate \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 25 \
+--min-num-images-per-class 10 \
+--is-train 
+
+
+docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/intermediate \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 25 \
+--min-num-images-per-class 20 \
+--is-train 
+
+# Test
+
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/intermediate \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 20
+
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/NOISE_noisy \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 20
+
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/noisy_raw \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 20
+
+output
+	intermediate
+		personA
+			img1
+			img2
+			...
+		personB
+		personC
+	noisy
+		personA
+			noisy_img1
+			...
+		personB
+			...
+	non-noisy
+		personA
+			non_noisy_img1
+		personB
+			...
+
+# Generating noise
+
+python3 ../noise.py noisy_raw/ sp
