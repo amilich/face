@@ -92,12 +92,18 @@ def get_hash_idx(cls_name):
 def get_image_paths_and_labels(dataset):
     image_paths_flat = []
     labels_flat = []
+    name_to_idx = {}
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
         label_name = re.split(r'(\d+)', dataset[i].image_paths[0])[0]
         digest_int = get_hash_idx(label_name)
         print('idx: {} label name: {}, label idx = {}'.format(i, label_name, digest_int))
-        labels_flat += [digest_int] * len(dataset[i].image_paths)
+        # labels_flat += [digest_int] * len(dataset[i].image_paths)
+        labels_flat += [i] * len(dataset[i].image_paths)
+        name_to_idx[label_name] = i
+        name_to_idx[i] = label_name
+    with open('label_indices.dic', 'wb') as dict_file:
+        pickle.dump(name_to_idx, dict_file, protocol=pickle.HIGHEST_PROTOCOL)
     return image_paths_flat, labels_flat
 
 

@@ -167,20 +167,28 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
     with open(classifier_filename, 'rb') as f:
         model, class_names = pickle.load(f)
 
-        predictions = model.predict_proba(emb_array, )
-        best_class_indices = np.argmax(predictions, axis=1)
-        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
+        with open('label_indices.dic', 'rb') as dict_file:
+            name_to_idx = pickle.load(dict_file)
 
-        actual_preds = [0] * len(predictions)
-        num_right = 0.0
-        for i in range(len(best_class_indices)):
-            cls_name = class_names[best_class_indices[i]]
-            pred_idx = get_hash_idx(cls_name)
-            actual_preds[i] = best_class_indices[i]
-            if best_class_indices[i] == label_array[i]:
-                num_right += 1.0
-            print('{} {} ; {}, best={}'.format(cls_name, pred_idx, label_array[i], best_class_indices[i]))
-        accuracy = num_right / len(predictions)
+            predictions = model.predict_proba(emb_array, )
+            best_class_indices = np.argmax(predictions, axis=1)
+            best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
+
+            actual_preds = [0] * len(predictions)
+            num_right = 0.0
+            for i in range(len(best_class_indices)):
+                cls_name = name_to_idx[best_class_indices[i]]
+                real_cls_name = class_names[label_array[i]]
+                # pred_idx = get_hash_idx(cls_name)
+                # actual_preds[i] = 
+                # if best_class_indices[i] == label_array[i]:
+                    # num_right += 1.0
+                if cls_name == real_cls_name:
+                    num_right += 1.0
+
+                # print('{} {} ; {}, best={}'.format(cls_name, pred_idx, label_array[i], best_class_indices[i]))
+                print('cls={} real={}'.format(cls_name, real_cls_name))
+            accuracy = num_right / len(predictions)
 
         # for i in range(len(best_class_indices)):
         #     # print('%4d  %s: %.3f' % (i, class_names[best_class_indices[i]], best_class_probabilities[i]))
@@ -190,7 +198,7 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
         #           label_array[i]))
 
         # accuracy = np.mean(np.equal(best_class_indices, label_array))
-        print('Accuracy: %.3f' % accuracy)
+            print('Accuracy: %.3f' % accuracy)
 
 
 if __name__ == '__main__':
