@@ -105,6 +105,8 @@ def get_image_paths_and_labels(dataset, is_train):
         name_to_idx[label_name] = i
         name_to_idx[i] = label_name
     if is_train:
+        curpath = os.path.abspath(os.curdir)
+        print(curpath)
         print('saving {}'.format(name_to_idx))
         f_path = '~/face/output/label_indices.dic'
         print('path {}'.format(f_path))
