@@ -106,7 +106,7 @@ def get_image_paths_and_labels(dataset, is_train):
         name_to_idx[i] = label_name
     if is_train:
         print('saving {}'.format(name_to_idx))
-        f_path = os.getcwd() + '/output/label_indices.dic'
+        f_path = '~/face/output/label_indices.dic'
         print('path {}'.format(f_path))
         with open(f_path, 'wb') as dict_file:
             pickle.dump(name_to_idx, dict_file, protocol=pickle.HIGHEST_PROTOCOL)

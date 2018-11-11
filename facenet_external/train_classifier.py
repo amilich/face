@@ -167,7 +167,7 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
     with open(classifier_filename, 'rb') as f:
         model, class_names = pickle.load(f)
 
-        f_path = os.getcwd() + '/output/label_indices.dic'
+        f_path = '~/face/output/label_indices.dic'
         with open(f_path, 'rb') as dict_file:
             name_to_idx = pickle.load(dict_file)
 
