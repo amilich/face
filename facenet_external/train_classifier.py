@@ -158,6 +158,15 @@ def _train_and_save_classifier(emb_array, label_array, class_names, classifier_f
         pickle.dump((model, class_names), outfile)
     logging.info('Saved classifier model to file "%s"' % classifier_filename_exp)
 
+def get_hash_idx(cls_name):
+    label_name = cls_name
+    if label_name[-1] == '_':
+        label_name = label_name[:-1]
+    label_name = label_name.split('/')[-1]
+    digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
+    digest_int = int(digest,16)
+    digest_int = digest_int % 100000 # TODO choose mod index
+    return digest_int
 
 def _evaluate_classifier(emb_array, label_array, classifier_filename):
     logger.info('Evaluating classifier on {} images'.format(len(emb_array)))
@@ -171,14 +180,25 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
         best_class_indices = np.argmax(predictions, axis=1)
         best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
 
+        actual_preds = [0] * len(predictions)
+        num_right = 0.0
         for i in range(len(best_class_indices)):
-            # print('%4d  %s: %.3f' % (i, class_names[best_class_indices[i]], best_class_probabilities[i]))
-            # print('{} {}: {} ; {} {}'.format(i, class_names[best_class_indices[i]], str(best_class_probabilities[i])[:5],\
-            #       label_array[i], class_names[label_array[i]]))
-            print('{} {}: {} ; {}'.format(i, class_names[best_class_indices[i]], str(best_class_probabilities[i])[:5],\
-                  label_array[i]))
+            cls_name = class_names[best_class_indices[i]]
+            pred_idx = get_hash_idx(cls_name)
+            actual_preds[i] = pred_idx
+            if pred_idx == label_array[i]:
+                num_right += 1.0
+            print('{} {} ; {}'.format(cls_name, pred_idx, label_array[i]))
+        accuracy = num_right / len(predictions)
 
-        accuracy = np.mean(np.equal(best_class_indices, label_array))
+        # for i in range(len(best_class_indices)):
+        #     # print('%4d  %s: %.3f' % (i, class_names[best_class_indices[i]], best_class_probabilities[i]))
+        #     # print('{} {}: {} ; {} {}'.format(i, class_names[best_class_indices[i]], str(best_class_probabilities[i])[:5],\
+        #     #       label_array[i], class_names[label_array[i]]))
+        #     print('{} {}: {} ; {}'.format(i, class_names[best_class_indices[i]], str(best_class_probabilities[i])[:5],\
+        #           label_array[i]))
+
+        # accuracy = np.mean(np.equal(best_class_indices, label_array))
         print('Accuracy: %.3f' % accuracy)
 
 
