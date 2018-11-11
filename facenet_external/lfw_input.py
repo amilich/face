@@ -79,18 +79,23 @@ def read_image_from_disk(filename_to_label_tuple):
     return example, label
 
 
+def get_hash_idx(cls_name):
+    label_name = cls_name
+    if label_name[-1] == '_':
+        label_name = label_name[:-1]
+    label_name = label_name.split('/')[-1]
+    digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
+    digest_int = int(digest,16)
+    digest_int = digest_int % 100000 # TODO choose mod index
+    return digest_int
+
 def get_image_paths_and_labels(dataset):
     image_paths_flat = []
     labels_flat = []
     for i in range(int(len(dataset))):
         image_paths_flat += dataset[i].image_paths
         label_name = re.split(r'(\d+)', dataset[i].image_paths[0])[0]
-        if label_name[-1] == '_':
-            label_name = label_name[:-1]
-        label_name = label_name.split('/')[-1]
-        digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
-        digest_int = int(digest,16)
-        digest_int = digest_int % 100000 # TODO choose mod index
+        digest_int = get_hash_idx(label_name)
         print('idx: {} label name: {}, label idx = {}'.format(i, label_name, digest_int))
         labels_flat += [digest_int] * len(dataset[i].image_paths)
     return image_paths_flat, labels_flat

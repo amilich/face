@@ -11,7 +11,7 @@ import tensorflow as tf
 from sklearn.svm import SVC
 from tensorflow.python.platform import gfile
 
-from lfw_input import filter_dataset, split_dataset, get_dataset
+from lfw_input import filter_dataset, split_dataset, get_dataset, get_hash_idx
 from facenet_external import lfw_input
 
 logger = logging.getLogger(__name__)
@@ -158,16 +158,6 @@ def _train_and_save_classifier(emb_array, label_array, class_names, classifier_f
     with open(classifier_filename_exp, 'wb') as outfile:
         pickle.dump((model, class_names), outfile)
     logging.info('Saved classifier model to file "%s"' % classifier_filename_exp)
-
-def get_hash_idx(cls_name):
-    label_name = cls_name
-    if label_name[-1] == '_':
-        label_name = label_name[:-1]
-    label_name = label_name.split('/')[-1]
-    digest = hashlib.sha1(label_name.strip().encode()).hexdigest()
-    digest_int = int(digest,16)
-    digest_int = digest_int % 100000 # TODO choose mod index
-    return digest_int
 
 def _evaluate_classifier(emb_array, label_array, classifier_filename):
     logger.info('Evaluating classifier on {} images'.format(len(emb_array)))
