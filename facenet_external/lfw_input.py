@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import hashlib
+import pickle
 
 import numpy as np
 import tensorflow as tf
