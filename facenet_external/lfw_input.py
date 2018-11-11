@@ -90,7 +90,7 @@ def get_hash_idx(cls_name):
     digest_int = digest_int % 100000 # TODO choose mod index
     return digest_int
 
-def get_image_paths_and_labels(dataset):
+def get_image_paths_and_labels(dataset, is_train):
     image_paths_flat = []
     labels_flat = []
     name_to_idx = {}
