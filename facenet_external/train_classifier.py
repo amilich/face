@@ -175,8 +175,8 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
         num_right = 0.0
         for i in range(len(best_class_indices)):
             cls_name = class_names[best_class_indices[i]]
-            # pred_idx = get_hash_idx(cls_name)
-            # actual_preds[i] = pred_idx
+            pred_idx = get_hash_idx(cls_name)
+            actual_preds[i] = best_class_indices[i]
             if best_class_indices[i] == label_array[i]:
                 num_right += 1.0
             print('{} {} ; {}, best={}'.format(cls_name, pred_idx, label_array[i], best_class_indices[i]))
