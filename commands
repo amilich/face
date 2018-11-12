@@ -59,7 +59,7 @@ docker run -v $PWD:/$(basename $PWD) \
 -e PYTHONPATH=$PYTHONPATH:/face \
 -it amilich/face \
 python3 /face/facenet_external/train_classifier.py \
---input-dir /face/output/NOISE_noisy \
+--input-dir /face/output/NOISE_noisy_raw \
 --model-path /face/etc/20170511-185253/20170511-185253.pb \
 --classifier-path /face/output/classifier.pkl \
 --num-threads 16 \
@@ -111,4 +111,5 @@ output
 
 # Generating noise
 
+cd output
 python3 ../noise.py noisy_raw/ sp
