@@ -57,7 +57,7 @@ def k_means(input_img, k):
             new_centroids.append(tuple(new_centroid))
 
         num_iter += 1
-        if num_iter >= 30 and set(new_centroids) != set(centroids):
+        if num_iter >= 5 and set(new_centroids) != set(centroids):
             break
         centroids = new_centroids
 
@@ -77,8 +77,7 @@ def kmeansImage(fileName, newDirName):
 
 def main(argv):
     dirName = str(argv[0])
-    noiseType = str(argv[1])
-    print(dirName, noiseType)
+    print(dirName)
     # filesInDir = glob.glob('./' + dirName + '/*')
     # print(filesInDir)
 
@@ -106,7 +105,7 @@ def main(argv):
             os.chmod(newSubDir, 0o777)
         for filename in os.listdir(dirName + '/' + folderName):
             print(filename)
-            createNoise(dirName + '/' + folderName + '/' + filename, newSubDir, noiseType)
+            kmeansImage(dirName + '/' + folderName + '/' + filename, newSubDir)
 
 
 if __name__ == "__main__":
