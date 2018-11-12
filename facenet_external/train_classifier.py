@@ -55,7 +55,6 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
         images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
         embedding_layer = tf.get_default_graph().get_tensor_by_name("embeddings:0")
         phase_train_placeholder = tf.get_default_graph().get_tensor_by_name("phase_train:0")
-
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(coord=coord, sess=sess)
 
@@ -77,6 +76,8 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
                 name_to_idx = pickle.load(dict_file)
                 for lab in label_array:
                     old_class_name = class_names[lab]
+                    if old_class_name.startswith('NOISE_'):
+                        old_class_name = old_class_name[6:]
                     new_label_array.append(name_to_idx[old_class_name])
             _evaluate_classifier(emb_array, new_label_array, classifier_filename)
 
