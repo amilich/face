@@ -37,7 +37,7 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
     start_time = time.time()
     with tf.Session(config=tf.ConfigProto(log_device_placement=False)) as sess:
         train_set, test_set = _get_test_and_train_set(input_directory, min_num_images_per_label=min_images_per_labels,
-                                                      split_ratio=split_ratio)
+                                                      split_ratio=split_ratio, is_train=is_train)
         if is_train:
             images, labels, class_names = _load_images_and_labels(train_set, image_size=160, batch_size=batch_size,
                                                                   num_threads=num_threads, num_epochs=num_epochs,
@@ -84,7 +84,7 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
         logger.info('Completed in {} seconds'.format(time.time() - start_time))
 
 
-def _get_test_and_train_set(input_dir, min_num_images_per_label, split_ratio=0.7):
+def _get_test_and_train_set(input_dir, min_num_images_per_label, split_ratio=0.7, is_train=False):
     """
     Load train and test dataset. Classes with < :param min_num_images_per_label will be filtered out.
     :param input_dir: 
@@ -196,7 +196,7 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
                     num_right += 1.0
 
                 # print('{} {} ; {}, best={}'.format(cls_name, pred_idx, label_array[i], best_class_indices[i]))
-                print('cls={} real={}'.format(cls_name, real_cls_name))
+                print('cls={} real={} prob={}'.format(cls_name, real_cls_name, best_class_probabilities[i]))
             accuracy = num_right / len(predictions)
 
         # for i in range(len(best_class_indices)):
