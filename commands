@@ -77,6 +77,18 @@ python3 /face/facenet_external/train_classifier.py \
 --num-epochs 5 \
 --min-num-images-per-class 20
 
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/noisy_raw \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 8 \
+--num-epochs 3 \
+--min-num-images-per-class 200
+
+
 output
 	intermediate
 		personA

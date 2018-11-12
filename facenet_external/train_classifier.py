@@ -71,7 +71,14 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
         if is_train:
             _train_and_save_classifier(emb_array, label_array, class_names, classifier_filename)
         else:
-            _evaluate_classifier(emb_array, label_array, classifier_filename)
+            new_label_array = []
+            f_path = '/face/output/label_indices.dic'
+            with open(f_path, 'rb') as dict_file:
+                name_to_idx = pickle.load(dict_file)
+                for lab in label_array:
+                    old_class_name = class_names[lab]
+                    new_label_array.append(name_to_idx[old_class_name])
+            _evaluate_classifier(emb_array, new_label_array, classifier_filename)
 
         logger.info('Completed in {} seconds'.format(time.time() - start_time))
 
