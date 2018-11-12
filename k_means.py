@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 def get_random_pixel(input_img, past_centroids):
     while True:
         (m,n,d) = input_img.shape
-        r_row = random.randint(0,m)
-        r_col = random.randint(0,n)
+        r_row = random.randint(0,m-1)
+        r_col = random.randint(0,n-1)
         pixel_val = list(input_img[r_row, r_col, :])
         print(r_row,r_col)
         print(pixel_val)
