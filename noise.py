@@ -37,7 +37,7 @@ def noise_generator(noise_type, img):
     elif noise_type == "sp":
         s_vs_p = 0.5
         # amount = 0.05 #0.004
-        amount = 0.01
+        amount = 0.04
         out = image
         # Generate Salt '1' noise
         num_salt = np.ceil(amount * image.size * s_vs_p)
