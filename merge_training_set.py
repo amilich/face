@@ -33,8 +33,8 @@ def main(argv):
             os.makedirs(newSubDir)
             os.chmod(newSubDir, 0o777)
         for filename in os.listdir(dir_1 + '/' + folderName):
-            img_file = folderName + '/' + filename 
-            n_img_file = 'NOISE_' + folderName + '/' + filename
+            img_file = dir_1 + '/' + folderName + '/' + filename 
+            n_img_file = dir_2 + '/' + 'NOISE_' + folderName + '/' + filename
             dest_1 = newSubDir + '/' + filename
             dest_2 = newSubDir + '/' + 'N_' + filename
             print('src={} dest={}'.format(img_file, dest_1))
