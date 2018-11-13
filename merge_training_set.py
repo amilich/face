@@ -35,7 +35,7 @@ def main(argv):
             os.makedirs(newSubDir)
             os.chmod(newSubDir, 0o777)
         for filename in os.listdir(dir_1 + '/' + folderName):
-            print(filename)
+            print(folderName + '/' + filename)
             # copyfile(filename, dst)
 
 if __name__ == "__main__":
