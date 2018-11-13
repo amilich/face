@@ -25,7 +25,7 @@ def main(argv):
         finally:
             os.umask(original_umask)
 
-    for folderName in os.listdir(dirName):
+    for folderName in os.listdir(dir_1):
         if folderName.startswith('.'):
             continue
         print(folderName)
@@ -34,7 +34,7 @@ def main(argv):
         if not os.path.exists(newSubDir):
             os.makedirs(newSubDir)
             os.chmod(newSubDir, 0o777)
-        for filename in os.listdir(dirName + '/' + folderName):
+        for filename in os.listdir(dir_1 + '/' + folderName):
             print(filename)
             # copyfile(filename, dst)
 
