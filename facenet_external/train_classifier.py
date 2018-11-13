@@ -78,6 +78,8 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
                     old_class_name = class_names[lab]
                     if old_class_name.startswith('NOISE_'):
                         old_class_name = old_class_name[6:]
+                    elif old_class_name.startswith('MERGED_'):
+                        old_class_name = old_class_name[7:]
                     new_label_array.append(name_to_idx[old_class_name])
             _evaluate_classifier(emb_array, new_label_array, classifier_filename)
 
