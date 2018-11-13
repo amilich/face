@@ -5,6 +5,7 @@ import scipy.misc
 import numpy as np 
 import matplotlib.pyplot as plt
 
+from shutil import copyfile
 from matplotlib.image import imread
 
 def main(argv):
