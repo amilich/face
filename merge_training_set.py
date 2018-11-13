@@ -39,8 +39,8 @@ def main(argv):
             dest_2 = newSubDir + '/' + 'N_' + filename
             print('src={} dest={}'.format(img_file, dest_1))
             print('src={} dest={}'.format(n_img_file, dest_2))
-            # copyfile(img_file, dest_1)
-            # copyfile(n_img_file, dest_2)
+            copyfile(img_file, dest_1)
+            copyfile(n_img_file, dest_2)
 
 
 if __name__ == "__main__":
