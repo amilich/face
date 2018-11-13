@@ -196,7 +196,7 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
                     num_right += 1.0
 
                 # print('{} {} ; {}, best={}'.format(cls_name, pred_idx, label_array[i], best_class_indices[i]))
-                print('cls={} real={} prob={}'.format(cls_name, real_cls_name, best_class_probabilities[i]))
+                print('cls={} real={} prob={}'.format(cls_name, real_cls_name, str(best_class_probabilities[i])[:5]))
             accuracy = num_right / len(predictions)
 
         # for i in range(len(best_class_indices)):
