@@ -37,7 +37,7 @@ def main(argv):
             img_file = dir_1 + '/' + folderName + '/' + filename 
             n_img_file = dir_2 + '/' + 'NOISE_' + folderName + '/' + filename
             dest_1 = newSubDir + '/' + filename
-            dest_2 = newSubDir + '/' + + filename.split('.')[0] + '_N.' + filename.split('.')[1]
+            dest_2 = newSubDir + '/' + filename.split('.')[0] + '_N.' + filename.split('.')[1]
             print('src={} dest={}'.format(img_file, dest_1))
             print('src={} dest={}'.format(n_img_file, dest_2))
             copyfile(img_file, dest_1)
