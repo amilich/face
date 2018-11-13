@@ -29,14 +29,16 @@ def main(argv):
         if folderName.startswith('.'):
             continue
         print(folderName)
-        newSubDir = newDirName + '/' + 'NOISE_' + folderName + '/'
+        newSubDir = newDirName + '/' + 'MERGED_' + folderName + '/'
         print('new dir {}'.format(newSubDir))
         if not os.path.exists(newSubDir):
             os.makedirs(newSubDir)
             os.chmod(newSubDir, 0o777)
         for filename in os.listdir(dir_1 + '/' + folderName):
-            print(folderName + '/' + filename)
-            # copyfile(filename, dst)
+            img_file = folderName + '/' + filename
+            dest = newSubDir + '/' + 'NOISE_' + filename
+            print('src={} dest={}'.format(img_file, dest))
+            # copyfile(img_file, newSubDir + '/' + 'NOISE_' + filename)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
