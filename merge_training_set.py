@@ -15,8 +15,6 @@ def main(argv):
     newDirName = 'NOISE_merged/'
     if os.path.exists(newDirName):
         print('Directory named ' + newDirName + ' already exists')
-        # return -1
-    # os.makedirs(newDirName, 777)
     else:
         try:
             original_umask = os.umask(0)
@@ -36,9 +34,14 @@ def main(argv):
             os.chmod(newSubDir, 0o777)
         for filename in os.listdir(dir_1 + '/' + folderName):
             img_file = folderName + '/' + filename
-            dest = newSubDir + '/' + 'NOISE_' + filename
-            print('src={} dest={}'.format(img_file, dest))
-            # copyfile(img_file, newSubDir + '/' + 'NOISE_' + filename)
+            n_img_file = 'NOISE_' + foldername + '/' + filename
+            dest_1 = newSubDir + '/' + filename
+            dest_2 = newSubDir + '/' + 'N_' + filename
+            print('src={} dest={}'.format(img_file, dest_1))
+            print('src={} dest={}'.format(n_img_file, dest_2))
+            # copyfile(img_file, dest_1)
+            # copyfile(n_img_file, dest_2)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
