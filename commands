@@ -113,6 +113,14 @@ python3 /face/facenet_external/train_classifier.py \
 --min-num-images-per-class 200
 
 
+
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/test_adv.py 
+
+
+
 output
 	intermediate
 		personA

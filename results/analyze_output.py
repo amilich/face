@@ -63,14 +63,22 @@ def print_data(data, data_std):
 		prec_diff = precision - prec_std
 		recall_diff = recall - recall_std
 
-		print('cls={: <{width}} \t accuracy={:1.3f} ({:+1.3f}) prec={:1.3f} ({:+1.3f}) recall={:1.3f} ({:+1.3f}) num_ex={:3d}'.format(\
-					cls_name,\
+		# print('cls={: <{width}} \t accuracy={:1.3f} ({:+1.3f}) prec={:1.3f} ({:+1.3f}) recall={:1.3f} ({:+1.3f}) num_ex={:3d}'.format(\
+		# 			cls_name,\
+		# 			accuracy,\
+		# 			ac_diff,\
+		# 			precision,\
+		# 			prec_diff,\
+		# 			recall,\
+		# 			recall_diff,\
+		# 			num_ex[cls_name],\
+		# 			width=15))
+
+		print('{:17s} {:1.3f} {:1.3f} {:1.3f} {:3d}'.format(\
+					cls_name,
 					accuracy,\
-					ac_diff,\
 					precision,\
-					prec_diff,\
 					recall,\
-					recall_diff,\
 					num_ex[cls_name],\
 					width=15))
 
