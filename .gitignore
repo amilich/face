@@ -3,3 +3,4 @@ data/
 etc/
 NOISE*
 *.pyc
+facial_landmarks/input/
