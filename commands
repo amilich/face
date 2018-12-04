@@ -5,14 +5,8 @@ docker run -v $PWD:/face \
 -it amilich/face python3 /face/facenet_external/preprocess.py \
 --input-dir /face/data \
 --output-dir /face/output/intermediate \
---crop-dim 96
+--crop-dim 160
 
-docker run -v $PWD:/face \
--e PYTHONPATH=$PYTHONPATH:/face \
--it amilich/face python3 /face/facenet_external/preprocess.py \
---input-dir /face/data-casia \
---output-dir /face/output/intermediate \
---crop-dim 96
 
 
 # Train
