@@ -2,3 +2,4 @@ output/
 data/
 etc/
 NOISE*
+*.pyc

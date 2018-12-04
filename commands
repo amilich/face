@@ -5,14 +5,14 @@ docker run -v $PWD:/face \
 -it amilich/face python3 /face/facenet_external/preprocess.py \
 --input-dir /face/data \
 --output-dir /face/output/intermediate \
---crop-dim 180
+--crop-dim 96
 
 docker run -v $PWD:/face \
 -e PYTHONPATH=$PYTHONPATH:/face \
 -it amilich/face python3 /face/facenet_external/preprocess.py \
 --input-dir /face/data-casia \
 --output-dir /face/output/intermediate \
---crop-dim 180
+--crop-dim 96
 
 
 # Train
@@ -30,6 +30,7 @@ python3 /face/facenet_external/train_classifier.py \
 --is-train 
 
 
+# Used 12/3/18
 docker run -v $PWD:/face \
 -e PYTHONPATH=$PYTHONPATH:/face \
 -it amilich/face \
