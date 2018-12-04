@@ -16,6 +16,8 @@ from facenet_external import lfw_input
 
 logger = logging.getLogger(__name__)
 
+IMAGE_SIZE=96
+
 
 def main(input_directory, model_path, classifier_output_path, batch_size, num_threads, num_epochs,
          min_images_per_labels, split_ratio, is_train=True): # use_tpu, tpu_name,
@@ -33,18 +35,17 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
     :param split_ratio: Ratio to split train/test dataset
     :param is_train: bool denoting if training or evaluate
     """
-
     start_time = time.time()
     with tf.Session(config=tf.ConfigProto(log_device_placement=False)) as sess:
         train_set, test_set = _get_test_and_train_set(input_directory, min_num_images_per_label=min_images_per_labels,
                                                       split_ratio=split_ratio, is_train=is_train)
         if is_train:
-            images, labels, class_names = _load_images_and_labels(train_set, image_size=160, batch_size=batch_size,
+            images, labels, class_names = _load_images_and_labels(train_set, image_size=IMAGE_SIZE, batch_size=batch_size,
                                                                   num_threads=num_threads, num_epochs=num_epochs,
                                                                   random_flip=True, random_brightness=True,
                                                                   random_contrast=True, is_train=is_train)
         else:
-            images, labels, class_names = _load_images_and_labels(test_set, image_size=160, batch_size=batch_size,
+            images, labels, class_names = _load_images_and_labels(test_set, image_size=IMAGE_SIZE, batch_size=batch_size,
                                                                   num_threads=num_threads, num_epochs=1, is_train=is_train)
 
         _load_model(model_filepath=model_path)

@@ -11,6 +11,8 @@ import tensorflow as tf
 from sklearn.svm import SVC
 from tensorflow.python.platform import gfile
 
+from foolbox.models import TensorFlowModel
+
 from lfw_input import filter_dataset, split_dataset, get_dataset, get_hash_idx
 from facenet_external import lfw_input
 
@@ -22,6 +24,10 @@ def main():
 			graph_def = tf.GraphDef()
 			graph_def.ParseFromString(f.read())
 			tf.import_graph_def(graph_def, name='')
+
+			model = TensorFlowModel(images, logits, bounds=(0, 255))
+
+
 
 if __name__ == '__main__':
 	main()

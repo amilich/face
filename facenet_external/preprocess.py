@@ -7,7 +7,10 @@ import time
 
 import cv2
 
-from facenet_external.align_dlib import AlignDlib
+try:
+    from facenet_external.align_dlib import AlignDlib
+except:
+    from align_dlib import *
 
 logger = logging.getLogger(__name__)
 
