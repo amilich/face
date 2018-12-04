@@ -29,6 +29,9 @@ except:
 
 from align_faces import align_face
 
+# Usage
+# python landmarks_nn.py --input-dir=input --output-dir=output
+
 IMAGE_WIDTH = 96
 IMAGE_HEIGHT = 96
 
