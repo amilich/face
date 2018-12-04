@@ -127,6 +127,7 @@ def _load_model(model_filepath):
             tf.import_graph_def(graph_def, name='')
     else:
         logger.error('Missing model file. Exiting')
+        logger.error(model_filepath)
         sys.exit(-1)
 
 
