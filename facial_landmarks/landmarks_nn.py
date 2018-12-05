@@ -1,3 +1,6 @@
+# from facial landmarks directory run:
+# python landmarks_nn.py --input-dir=input --output-dir=output
+
 import argparse
 import glob
 import logging
