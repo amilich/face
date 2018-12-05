@@ -49,7 +49,7 @@ def preprocess_image(input_path, output_path, crop_dim, model):
     """
     temp_output = 'tmp/resize_1.jpg'
     align_face(input_path, temp_output, 96)
-    x_img = imread(temp_output) # read into landmark detector
+    x_img = cv2.imread(temp_output)
     x_flat = np.zeros((96,96,1))
     x_flat[:,:,0] = x_img[:,:,0]
     Y = model.predict_on_batch(np.array([x_flat]))[0]
@@ -61,32 +61,12 @@ def preprocess_image(input_path, output_path, crop_dim, model):
             x_unflat[x,y,0] = 0
             x_unflat[x,y,1] = 0
             x_unflat[x,y,2] = 0
-    # plt.savefig(temp_output)
-    # print('saved to {}'.format(temp_output))
-    # im = (255.0 / x_img.max() * (x_img - x_img.min())).astype(np.uint8)
-    # im = Image.fromarray(rescaled)
-    # im.save('test.png')
     cv2.imwrite(temp_output, x_unflat)
-    # plt.imshow(x_flat)
-    # print('hi')
-    # scipy.misc.toimage(x_flat, cmin=0.0, cmax=255).save('outfile.jpg')
-    # quit()
-    # img = Image.fromarray(x_flat)
-    # print(np.uint8(cm.gist_earth(x_flat)*255))
-    # img = Image.fromarray(np.uint8(cm.gist_earth(x_flat)*255))
-    # quit()
 
     image = _process_image(temp_output, crop_dim)
     if image is not None:
         logger.warning('Writing processed file: {}'.format(output_path))
         cv2.imwrite(output_path, image)
-
-        #   img = Image.open('resize.png')
-        # basewidth = 96
-        # img = img.resize((basewidth,basewidth), Image.ANTIALIAS)
-        # img.save('resize2.png') 
-        # A = imread('resize2.png')
-
     else:
         logger.warning("Skipping filename: {}".format(input_path))
 
