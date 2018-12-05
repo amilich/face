@@ -64,13 +64,16 @@ def preprocess_image(input_path, output_path, crop_dim, model):
     Y = model.predict_on_batch(np.array([x_flat]))[0]
     print(Y)
     x_unflat = np.copy(x_img)
+    points = []
     for i in range(0,Y.shape[0],2):
         if 0 < Y[i+1] < IMAGE_HEIGHT and 0 < Y[i] < IMAGE_WIDTH:
             x,y = int(Y[i+1]),int(Y[i])
             # TODO noise around x,y
-            x_unflat[x,y,0] = 0
-            x_unflat[x,y,1] = 0
-            x_unflat[x,y,2] = 0
+            # x_unflat[x,y,0] = 0
+            # x_unflat[x,y,1] = 0
+            # x_unflat[x,y,2] = 0
+            points.append((x, y))
+    #sp_img = 
     cv2.imwrite(temp_output, x_unflat)
 
     image = _process_image(temp_output, crop_dim)

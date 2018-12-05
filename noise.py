@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # Web source: http://www.xiaoliangbai.com/2016/09/09/more-on-image-noise-generation
 # Source of the code is based on an excelent piece code from stackoverflow
 # http://stackoverflow.com/questions/22937589/how-to-add-noise-gaussian-salt-and-pepper-etc-to-image-in-python-with-opencv
-def noise_generator(noise_type, img):
+def noise_generator(noise_type, img, face_loc = None):
     """
     Generate noise to a given Image based on required noise type
     
@@ -40,16 +40,30 @@ def noise_generator(noise_type, img):
         amount = 0.04
         out = image
         # Generate Salt '1' noise
-        num_salt = np.ceil(amount * image.size * s_vs_p)
-        coords = [np.random.randint(0, i - 1, int(num_salt))
-              for i in image.shape]
-        out[coords] = 255
-        # Generate Pepper '0' noise
-        num_pepper = np.ceil(amount* image.size * (1. - s_vs_p))
-        coords = [np.random.randint(0, i - 1, int(num_pepper))
-              for i in image.shape]
-        out[coords] = 0
-        return out
+        # use a subset of the image to draw random points around locations
+        if face_loc is None:
+            num_salt = np.ceil(amount * image.size * s_vs_p)
+            coords = [np.random.randint(0, i - 1, int(num_salt))
+                for i in image.shape]
+            out[coords] = 255
+            # Generate Pepper '0' noise
+            num_pepper = np.ceil(amount* image.size * (1. - s_vs_p))
+            coords = [np.random.randint(0, i - 1, int(num_pepper))
+                for i in image.shape]
+            out[coords] = 0
+            return out
+        else:
+            var = 50
+            for point in face_loc:
+                s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], 100)
+                coords = [np.array([int(p[0]) for p in s]), np.array([int(p[1]) for p in s]), np.array([np.random.randint(0, 2) for p in s])]
+                print(coords)
+                out[coords] = 0
+
+                s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], 100)
+                coords = [np.array([int(p[0]) for p in s]), np.array([int(p[1]) for p in s]), np.array([np.random.randint(0, 2) for p in s])]
+                out[coords] = 255
+            return out 
     elif noise_type == "poisson":
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
@@ -64,10 +78,10 @@ def noise_generator(noise_type, img):
         return image
 
 def test():
-    im = np.asarray(imread('dog.jpg'))
+    im = np.asarray(imread('test_images/dog/dog.jpg'))
 
     plt.figure(2)
-    sp_im = noise_generator('sp', im)
+    sp_im = noise_generator('sp', im, [(50,50), (100,100)])
     gauss_im = noise_generator('gauss', im)
     plt.subplot(1,2,1)
     plt.title('Salt & Pepper Noise')
@@ -80,15 +94,18 @@ def test():
     plt.show()
     plt.close(2)
 
-def createNoise(fileName, newDirName, noiseType):
+def createNoise(fileName, newDirName, noiseType, face_loc):
     im = np.asarray(imread(fileName))
-    new_im = noise_generator(noiseType, im)
+    new_im = noise_generator(noiseType, im, face_loc)
     print(newDirName + os.path.basename(fileName))
     scipy.misc.imsave(newDirName + os.path.basename(fileName), new_im)
 
 def main(argv):
+    #test()
+    #exit()
     dirName = str(argv[0])
     noiseType = str(argv[1])
+    face_loc = argv[2] if len(argv) > 2 else None
     print(dirName, noiseType)
     # filesInDir = glob.glob('./' + dirName + '/*')
     # print(filesInDir)
@@ -117,7 +134,7 @@ def main(argv):
             os.chmod(newSubDir, 0o777)
         for filename in os.listdir(dirName + '/' + folderName):
             print(filename)
-            createNoise(dirName + '/' + folderName + '/' + filename, newSubDir, noiseType)
+            createNoise(dirName + '/' + folderName + '/' + filename, newSubDir, noiseType, face_loc)
 
 
 if __name__ == "__main__":
