@@ -1,3 +1,9 @@
+"""
+Heavily modified combination of model from https://www.kaggle.com/madhawav/basic-fully-connected-nn
+with two different facial cropping and alignment models: align_dlib from CMU, and align_faces,
+which is included in a separate file.
+"""
+
 # from facial landmarks directory run:
 # python landmarks_nn.py --input-dir=input --output-dir=output
 
@@ -197,7 +203,6 @@ if __name__ == '__main__':
         model.save_weights('model.h5')
         print('Saved model to disk')
     else:
-        # x = load_test_ex()
         json_file = open('model.json', 'r')
         loaded_model_json = json_file.read()
         json_file.close()
@@ -205,7 +210,6 @@ if __name__ == '__main__':
         # load weights into model
         model.load_weights('model.h5')
 
-    # pool = mp.Pool(processes=mp.cpu_count())
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     for image_dir in os.listdir(input_dir):
@@ -217,25 +221,9 @@ if __name__ == '__main__':
         print('Processing {}'.format(image_path))
         image_output_dir = os.path.join(output_dir, os.path.basename(os.path.dirname(image_path)))
         output_path = os.path.join(image_output_dir, os.path.basename(image_path))
-        # pool.apply_async(preprocess_image, (image_path, output_path, crop_dim, model))
         preprocess_image(image_path, output_path, crop_dim, model)
-    # pool.close()
-    # pool.join()
     logger.info('Preprocessing completed in {} seconds'.format(time.time() - start_time))
 
-
-    
-    # print('Loaded model from disk')
-    # print(x.shape)
-
-    # x_dim = np.zeros((96,96,1))
-    # x_dim[:,:,0] = x[:,:,0]
-
-    # pred = model.predict_on_batch(np.array([x_dim]))
-    # print(pred)
-    # show_image(x_dim, pred[0])
-        # plt.imshow(x_dim[:,:,0])
-        # plt.show()
 
 # python preprocess.py --input-dir=../facial_landmarks  --output-dir=../facial_landmarks/output/ --crop-dim=96
 # python ../facenet_external/preprocess.py --input-dir=../in-images  --output-dir=../facial_landmarks/output/ --crop-dim=160
