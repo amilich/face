@@ -53,16 +53,23 @@ def noise_generator(noise_type, img, face_loc = None):
             out[coords] = 0
             return out
         else:
-            var = 50
+            var = 5
+            num_pts = 10
             for point in face_loc:
-                s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], 100)
+                s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], num_pts)
                 coords = [np.array([int(p[0]) for p in s]), np.array([int(p[1]) for p in s]), np.array([np.random.randint(0, 2) for p in s])]
-                print(coords)
-                out[coords] = 0
 
-                s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], 100)
+                for idx in range(len(coords[0])):
+                    x,y,z = coords[0][idx],coords[1][idx],coords[2][idx]
+                    if x >= 0 and x < out.shape[0] and y >= 0 and y < out.shape[1]:
+                        out[x,y,z] = 0
+
+                s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], num_pts)
                 coords = [np.array([int(p[0]) for p in s]), np.array([int(p[1]) for p in s]), np.array([np.random.randint(0, 2) for p in s])]
-                out[coords] = 255
+                for idx in range(len(coords[0])):
+                    x,y,z = coords[0][idx],coords[1][idx],coords[2][idx]
+                    if x >= 0 and x < out.shape[0] and y >= 0 and y < out.shape[1]:
+                        out[x,y,z] = 255
             return out 
     elif noise_type == "poisson":
         vals = len(np.unique(image))

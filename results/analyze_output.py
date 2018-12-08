@@ -50,7 +50,8 @@ def calc_cls_dat(data):
 
 def print_data(data, data_std):
 	(cls_acc, cls_prec, cls_recall, num_ex) = data
-	(std_acc, std_prec, std_recall, _) = data_std	
+	(std_acc, std_prec, std_recall, _) = data_std
+	acc_dict = {}
 	for cls_name,accuracy in cls_acc.items():
 		precision = cls_prec[cls_name]
 		recall = cls_recall[cls_name]
@@ -63,54 +64,54 @@ def print_data(data, data_std):
 		prec_diff = precision - prec_std
 		recall_diff = recall - recall_std
 
-		# print('cls={: <{width}} \t accuracy={:1.3f} ({:+1.3f}) prec={:1.3f} ({:+1.3f}) recall={:1.3f} ({:+1.3f}) num_ex={:3d}'.format(\
-		# 			cls_name,\
-		# 			accuracy,\
-		# 			ac_diff,\
-		# 			precision,\
-		# 			prec_diff,\
-		# 			recall,\
-		# 			recall_diff,\
-		# 			num_ex[cls_name],\
-		# 			width=15))
+		acc_dict[cls_name] = accuracy
 
-		print('{:17s} {:1.3f} {:1.3f} {:1.3f} {:3d}'.format(\
+		p_str = '{:17s} {:1.3f} {:1.3f} {:1.3f} {:3d}'.format(\
 					cls_name,
 					accuracy,\
 					precision,\
 					recall,\
 					num_ex[cls_name],\
-					width=15))
+					width=15)
+	return acc_dict
 
 def main():
 	raw_dat = calc_cls_dat(read_into_dicts('raw_output'))
 	noise_dat = calc_cls_dat(read_into_dicts('sp_noise_output'))
 	adv_dat = calc_cls_dat(read_into_dicts('adv_train_out'))
 
+	adv_dat_1 = calc_cls_dat(read_into_dicts('adv_crop_1'))
+	a_dicts = []
 	print('Raw')
-	print_data(raw_dat, raw_dat)
+	raw_d = print_data(raw_dat, raw_dat)
 	print('\nNoisy')
-	print_data(noise_dat, raw_dat)
+	noise_d = print_data(noise_dat, raw_dat)
 	print('\nAdv train')
-	print_data(adv_dat, raw_dat)
+	adv_train_d = print_data(adv_dat, raw_dat)
+	print('\nActual adv')
+	adv_landmark = print_data(adv_dat_1, raw_dat)
 	
+	overall_d = collections.defaultdict(list)
+	def add_to_d(a_dict):
+		for k,v in a_dict.items():
+			overall_d[k].append(v)
+	add_to_d(raw_d)
+	add_to_d(noise_d)
+	add_to_d(adv_train_d)
+	add_to_d(adv_landmark)
 
-	# (raw_cls_confidence, raw_cls_pct_cor) = raw_dat = read_into_dicts('raw_output')
-	# # (noise_cls_confidence, noise_cls_pct_cor) = noise_dat = read_into_dicts('sp_noise_output')
-	# (noise_cls_confidence, noise_cls_pct_cor) = noise_dat = read_into_dicts('adv_train_out')
-	# print(raw_dat)
-	# print()
-	# print(noise_dat)
-
-	# for k,v in raw_cls_confidence.items():
-	# 	if k not in noise_dat:
-	# 		print('For {}, dif={}'.format(k, -v[0]))
-	# 	else:
-	# 		conf_dif = v[0] - noise_cls_confidence[k][0]
-	# 		print('For {}, dif={}'.format(k, conf_dif))
-	# print()
-	# for k,v in raw_cls_pct_cor.items():
-	# 	print('cls={} raw={} noisy={} num={}'.format(k, v, noise_cls_pct_cor[k], raw_cls_confidence[k][1]))
+	max_len = 0
+	for k,v in overall_d.items():
+		if len(v) > max_len:
+			max_len = len(v)
+	print('max len = {}'.format(max_len))
+	print('\t\t\t\t  Raw Noisy Adv_train Adv_landmark')
+	for k,v in overall_d.items():
+		if len(v) == max_len:
+			p_str = '{:17s} '.format(k)
+			for i in v:
+				p_str += '{:1.3f} '.format(i, width=15)
+			print(p_str)
 
 if __name__ == '__main__':
 	main()

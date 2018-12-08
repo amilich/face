@@ -25,7 +25,7 @@ python3 /face/facenet_external/train_classifier.py \
 
 
 # Used 12/3/18
-docker run -v $PWD:/face \
+sudo docker run -v $PWD:/face \
 -e PYTHONPATH=$PYTHONPATH:/face \
 -it amilich/face \
 python3 /face/facenet_external/train_classifier.py \
@@ -74,6 +74,7 @@ python3 /face/facenet_external/train_classifier.py \
 --num-epochs 5 \
 --min-num-images-per-class 20
 
+# testing with input to noisy set
 docker run -v $PWD:/$(basename $PWD) \
 -e PYTHONPATH=$PYTHONPATH:/face \
 -it amilich/face \
@@ -107,7 +108,29 @@ python3 /face/facenet_external/train_classifier.py \
 --num-epochs 3 \
 --min-num-images-per-class 200
 
+# for testing adversarial ex
+sudo docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/adv_face \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 20
 
+# for non-adversarial testing (i.e. GWB and others)
+docker run -v $PWD:/$(basename $PWD) \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/adv_raw \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 5 \
+--min-num-images-per-class 20
 
 docker run -v $PWD:/$(basename $PWD) \
 -e PYTHONPATH=$PYTHONPATH:/face \

@@ -3,4 +3,6 @@ data/
 etc/
 NOISE*
 *.pyc
+*.csv
 facial_landmarks/input/
+facial_landmarks/training/

@@ -38,6 +38,11 @@ except:
 
 from align_faces import align_face
 
+# import noise generator
+import sys
+sys.path.insert(0,'..')
+from noise import noise_generator
+
 # Usage
 # python landmarks_nn.py --input-dir=input --output-dir=output
 
@@ -62,18 +67,15 @@ def preprocess_image(input_path, output_path, crop_dim, model):
     x_flat = np.zeros((96,96,1))
     x_flat[:,:,0] = x_img[:,:,0]
     Y = model.predict_on_batch(np.array([x_flat]))[0]
-    print(Y)
+
     x_unflat = np.copy(x_img)
     points = []
     for i in range(0,Y.shape[0],2):
         if 0 < Y[i+1] < IMAGE_HEIGHT and 0 < Y[i] < IMAGE_WIDTH:
             x,y = int(Y[i+1]),int(Y[i])
-            # TODO noise around x,y
-            # x_unflat[x,y,0] = 0
-            # x_unflat[x,y,1] = 0
-            # x_unflat[x,y,2] = 0
             points.append((x, y))
-    #sp_img = 
+
+    x_unflat = noise_generator('sp', x_unflat, points)
     cv2.imwrite(temp_output, x_unflat)
 
     image = _process_image(temp_output, crop_dim)
@@ -119,7 +121,7 @@ def load_dataset():
     '''
     Xtrain = []
     Ytrain = []
-    with open('input/training/training.csv') as csvfile:
+    with open('training/training.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             img = np.zeros((IMAGE_HEIGHT,IMAGE_WIDTH,1), dtype=np.float)
@@ -175,36 +177,43 @@ if __name__ == '__main__':
     parser.add_argument('--output-dir', type=str, action='store', default='output', dest='output_dir')
     parser.add_argument('--crop-dim', type=int, action='store', default=160, dest='crop_dim',
                         help='Size to crop images to')
+    parser.add_argument('--train', action='store_true', help='Retrain model')
     args = parser.parse_args()
 
     input_dir, output_dir, crop_dim = args.input_dir, args.output_dir, args.crop_dim
 
     start_time = time.time()
 
-
-    create_model = False
-    if create_model:
+    if args.train:
+        print('Training model')
         Xdata, Ydata = load_dataset()
         Xtrain = Xdata[:]
         Ytrain = Ydata[:]
-        model = keras.Sequential([keras.layers.Flatten(input_shape=(IMAGE_HEIGHT,IMAGE_WIDTH,1)),
-                                  # keras.layers.Conv1D(1, (6), use_bias=True),
-                                  keras.layers.Dense(128, activation="relu"),
-                                  keras.layers.Dropout(0.1),
-                                  keras.layers.Dense(64, activation="relu"),
-                                  keras.layers.Dense(30)
-                                 ])
+        model = keras.Sequential()
+
+        Xtrain = np.array(Xtrain)
+        # Info about max pooling layers http://cs231n.github.io/convolutional-networks/#pool
+        # Convolutional layer resulted in very long training times; so we omit
+        model.add(keras.layers.MaxPooling2D(pool_size=(2,2), strides=None))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(96, activation=keras.activations.relu))
+        model.add(keras.layers.Dropout(0.2))
+        model.add(keras.layers.Dense(64, activation=keras.activations.relu))
+        model.add(keras.layers.Dropout(0.1))
+        model.add(keras.layers.Dense(30, activation=keras.activations.relu))
+
         # Compile model
         model.compile(optimizer=tf.train.AdamOptimizer(), 
                       loss='mse',
                       metrics=['mae'])
         # Train model
-        model.fit(Xtrain, Ytrain, epochs=500)
+        model.fit(Xtrain, Ytrain, epochs=300)
         model_json = model.to_json()
         with open('model.json', 'w') as json_file:
             json_file.write(model_json)
         model.save_weights('model.h5')
-        print('Saved model to disk')
+        print('Saved model to disk; quitting')
+        quit()
     else:
         json_file = open('model.json', 'r')
         loaded_model_json = json_file.read()
@@ -224,7 +233,10 @@ if __name__ == '__main__':
         print('Processing {}'.format(image_path))
         image_output_dir = os.path.join(output_dir, os.path.basename(os.path.dirname(image_path)))
         output_path = os.path.join(image_output_dir, os.path.basename(image_path))
-        preprocess_image(image_path, output_path, crop_dim, model)
+        try:
+            preprocess_image(image_path, output_path, crop_dim, model)
+        except:
+            print('Failed to process {}'.format(image_path))
     logger.info('Preprocessing completed in {} seconds'.format(time.time() - start_time))
 
 

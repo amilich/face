@@ -181,7 +181,7 @@ def _evaluate_classifier(emb_array, label_array, classifier_filename):
         with open(f_path, 'rb') as dict_file:
             name_to_idx = pickle.load(dict_file)
 
-            predictions = model.predict_proba(emb_array, )
+            predictions = model.predict_proba(emb_array,)
             best_class_indices = np.argmax(predictions, axis=1)
             best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
 
