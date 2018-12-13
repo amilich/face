@@ -3,7 +3,6 @@ import glob
 import os
 
 from shutil import copyfile
-from matplotlib.image import imread
 
 """
 Go through each folder of images and, for individuals with MIN_PHOTOS or more
