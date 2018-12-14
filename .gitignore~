@@ -1,7 +1,0 @@
-facial_landmarks/training/
-output/
-data/
-etc/
-NOISE*
-*.pyc
-facial_landmarks/input/
