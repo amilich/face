@@ -37,6 +37,19 @@ python3 /face/facenet_external/train_classifier.py \
 --min-num-images-per-class 20 \
 --is-train 
 
+# Used 12/12/18 for limited dataset
+sudo docker run -v $PWD:/face \
+-e PYTHONPATH=$PYTHONPATH:/face \
+-it amilich/face \
+python3 /face/facenet_external/train_classifier.py \
+--input-dir /face/output/intermediate_lim \
+--model-path /face/etc/20170511-185253/20170511-185253.pb \
+--classifier-path /face/output/classifier.pkl \
+--num-threads 16 \
+--num-epochs 25 \
+--min-num-images-per-class 20 \
+--is-train 
+
 docker run -v $PWD:/face \
 -e PYTHONPATH=$PYTHONPATH:/face \
 -it amilich/face \

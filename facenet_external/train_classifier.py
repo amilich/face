@@ -80,7 +80,12 @@ def main(input_directory, model_path, classifier_output_path, batch_size, num_th
                         old_class_name = old_class_name[6:]
                     elif old_class_name.startswith('MERGED_'):
                         old_class_name = old_class_name[7:]
-                    new_label_array.append(name_to_idx[old_class_name])
+                    try:
+                        new_label_array.append(name_to_idx[old_class_name])
+                    except:
+                        print('Failed to label')
+                        new_label_array.append(-1) # TODO
+                        continue
             _evaluate_classifier(emb_array, new_label_array, classifier_filename)
 
         logger.info('Completed in {} seconds'.format(time.time() - start_time))
