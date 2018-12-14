@@ -77,8 +77,10 @@ def print_data(data, data_std):
 
 def main():
 	# with open('adversarial_landmark_lim') as f:
-	with open('noise_img_output_lim') as f:
+	with open('adv_train_landmark') as f:
 	# with open('adversarial_landmark_lim') as f:
+		num_c = 0
+		c_tot = 0.0
 		cls_dat = collections.defaultdict(int)
 		cls_dat_c = collections.defaultdict(int)
 		for line in f.readlines():
@@ -86,7 +88,14 @@ def main():
 			dat = line.split(' ')
 			pred_cls = dat[0].split('=')[1]
 			actual_cls = dat[1].split('=')[1]
-			confidence = dat[2].split('=')[1]
+			try:
+				confidence = float(dat[2].split('=')[1])
+				num_c += 1
+				c_tot += confidence
+			except:
+				pass
+
+
 			if pred_cls == actual_cls:
 				cls_dat_c[actual_cls] += 1
 			cls_dat[actual_cls] += 1
@@ -97,6 +106,14 @@ def main():
 	for k in ['George_W_Bush', 'Hamid_Karzai', 'Tony_Blair', 'John_Negroponte', 'Bill_Clinton']:
 		print(k)
 		print(cls_dat_c[k] / cls_dat[k])
+
+	# raw_output
+	# sp_noise_output
+	# adversarial_landmark
+	print()
+	print('Avg c')
+	print(c_tot / num_c)
+
 
 
 if __name__ == '__main__':

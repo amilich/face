@@ -54,7 +54,7 @@ def noise_generator(noise_type, img, face_loc = None):
             return out
         else:
             var = 5
-            num_pts = 15
+            num_pts = 12
             for point in face_loc:
                 s = np.random.multivariate_normal((point[0], point[1]), [[var,0], [0,var]], num_pts)
                 coords = [np.array([int(p[0]) for p in s]), np.array([int(p[1]) for p in s]), np.array([np.random.randint(0, 2) for p in s])]
